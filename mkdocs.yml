@@ -1,0 +1,8 @@
+site_name: LionIQ 文档
+pages: 
+- Home: index.md
+- Install: install.md
+- Swift3: swift_3_api.md
+- Swift2.3: swift_2.3_api.md
+- Obj-C: objc_api.md
+theme: readthedocs
