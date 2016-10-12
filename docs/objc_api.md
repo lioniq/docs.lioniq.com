@@ -18,14 +18,14 @@
     [super viewDidLoad];
 
     // 添加到本view
-    self.webview = [[LIQWebview alloc] initWithFrame:[self.webviewPlaceholder.frame];
-    self.view.addSubview(self.webview);
+    self.webview = [[LIQWebview alloc] initWithFrame:[self webviewPlaceholder].frame];
+    [self.view addSubview: self.webview];
 
     // 设置代理
     self.webview.delegate = self;
 
     // 实现商城
-    [self.webview reloadShop:@"我的_APP_KEY", secret: @"我的_APP_SECRET", userId: @"消费者_USER_ID"];
+    [self.webview reloadShop: @"我的_APP_KEY", secret: @"我的_APP_SECRET", userId: @"消费者_USER_ID"];
 }
 
 @end
