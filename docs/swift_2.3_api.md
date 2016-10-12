@@ -3,6 +3,10 @@
 ## 安装
 Swift 2.3 兼容版本需要从 `swift_2.3` 分支下载插件包. 
 
+````
+    pod install 'Lioniq', :git => 'https://github.com/lioniq/lioniq-ios', :branch => 'swift-2.3'
+````
+
 ## 项目引入
 
 在 `ViewController` 中引入插件生成 `LIQWebview` 的实例就可以引入商城、及购物车界面。
