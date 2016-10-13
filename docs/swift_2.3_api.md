@@ -1,10 +1,10 @@
 # Swift 2.3 
 
 ## 安装
-Swift 2.3 兼容版本需要从 `swift_2.3` 分支下载插件包. 
+Swift 2.3 兼容版本需要从 `swift2.3` 分支下载插件包. 
 
 ````
-    pod install 'Lioniq', :git => 'https://github.com/lioniq/lioniq-ios', :branch => 'swift-2.3'
+    pod install 'Lioniq', :git => 'https://github.com/lioniq/lioniq-ios', :branch => 'swift2.3'
 ````
 
 ## 项目引入
