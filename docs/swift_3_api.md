@@ -1,3 +1,5 @@
+# Swift 3.0
+
 ## 项目引入
 
 在 `ViewController` 中引入插件生成 `LIQWebview` 的实例就可以引入商城、及购物车界面。
