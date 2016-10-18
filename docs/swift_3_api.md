@@ -15,20 +15,20 @@ class ShopViewController: UIViewController {
     @IBOutlet weak var webviewPlaceholder: UIView!
 
     // 插件 webview 
-    var webview: LIQWebview!
+    var liqview: LIQView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // 添加到本view
-        self.webview = LIQWebview(frame: webviewPlaceholder.frame)
-        self.view.addSubview(self.webview)
+        self.liqview = LIQView(frame: webviewPlaceholder.frame)
+        self.view.addSubview(self.liqview)
 
         // 设置代理
-        self.webview.delegate = self 
+        self.liqview.delegate = self 
         
         // 实现商城
-        self.webview.reloadShop(key: "我的_APP_KEY", secret: "我的_APP_SECRET", userId: "消费者_USER_ID")
+        self.liqview.reloadShop(key: "我的_APP_KEY", secret: "我的_APP_SECRET", userId: "消费者_USER_ID")
         
     }
 }
