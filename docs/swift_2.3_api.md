@@ -50,8 +50,9 @@ class ShopViewController: UIViewController {
 
         // OPTIONAL 可选: 
         // 载入商城离线信息, 从后台下载保存为 shop_data.json 后拉进项目即可
-        if let shopDataUrl = NSBundle.mainBundle.urlForResource("shop_data", withExtension: "json") {
-            liqManager.setShopData(shopDataURL: shopDataUrl)
+        if let shopDataUrl = NSBundle.mainBundle().pathForResource("shop_data", ofType: "json") {
+            let shopDataUrl = NSURL(fileURLWithPath: shopDataUrl)
+            liqManager.setShopData(shopDataUrl)
         }
     }
 }

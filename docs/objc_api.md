@@ -26,7 +26,7 @@
 
     // LionIQ 单列管理对象
     LIQManager* liqManager = [LIQManager defaultManager];
-    [liqManager setAppKey:"我的_APP_KEY", appSecret: "我的_APP_SECRET"];
+    [liqManager setAppKeyWithAppKey:@"我的_APP_KEY", appSecret: @"我的_APP_SECRET"];
 
     // 设置代理
     self.liqview.delegate = self;
@@ -40,7 +40,7 @@
 
     // OPTIONAL 可选: 
     // 载入商城离线信息, 从后台下载保存为 shop_data.json 后拉进项目即可
-    NSURL* shopDataUrl = [[NSBundle mainBundle] urlForResource: "shop_data", withExtension: "json"];
+    NSURL* shopDataUrl = [[NSBundle mainBundle] pathForResource:@"shop_data" ofType: @"json"];
 
     if (shopDataUrl != nil) {
         [liqManager setShopData:shopDataUrl];
