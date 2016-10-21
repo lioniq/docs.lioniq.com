@@ -6,6 +6,7 @@ pages:
 - Swift2.3: swift_2.3_api.md
 - Obj-C: objc_api.md
 - JSON 对象: json_objects.md
+- 接入支付: payment.md
 - 储存订单信息: order_data_json.md
 - 后台管理: dashboard.md
 theme: readthedocs

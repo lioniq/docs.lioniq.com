@@ -143,7 +143,7 @@ class ShopViewController: UIViewController {
         
         param | class | notes
         ------|-------|---------
-        `itemData` | `Dictionary<String, AnyObject>` | 产品信息 JSON, 请查看 `itemData`
+        `itemData` | `Dictionary<String, AnyObject>` | 产品信息 JSON, 请查看 [ItemData](json_objects.md)
 
 - `func webviewDidAddToCart(cartItemData: Dictionary<String, AnyObject>)`
     + 加入购物车事件, 若用户未登陆时可以在这个事件显示登陆／注册界面。也可以用来响应 UI 效果给用户, 列如: TabBar 购物车图标上添加 badge 显示有产品加入了购物车. 
@@ -151,7 +151,7 @@ class ShopViewController: UIViewController {
         
         param | class | notes
         ------|-------|---------
-        `cartItemData` | `Dictionary<String, AnyObject>` | 购物车列表项信息 JSON, 请查看 `cartItemData`
+        `cartItemData` | `Dictionary<String, AnyObject>` | 购物车列表项信息 JSON, 请查看 [CartItemData](json_objects.md)
 
 - `func webviewDidCheckout()`
     + 插件载入结算路由事件
@@ -162,7 +162,7 @@ class ShopViewController: UIViewController {
         
         param | class | notes
         ------|-------|---------
-        `orderData` | `Dictionary<String, AnyObject>` | 订单信息 JSON, 请查看 `orderData`
+        `orderData` | `Dictionary<String, AnyObject>` | 订单信息 JSON, 请查看 [OrderData](json_objects.md)
 
 
 
