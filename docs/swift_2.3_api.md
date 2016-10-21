@@ -27,21 +27,86 @@ class ShopViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // 针对 storyboard 7plus/6plus bug
+        self.webviewPlaceholder.frame = self.view.frame 
+
         // 添加到本view
         self.liqview = LIQView(frame: webviewPlaceholder.frame)
         self.view.addSubview(self.liqview)
 
+        // LionIQ 单列管理对象
+        let liqManager = LIQManager.defaultManager
+        liqManager.setAppKey(appKey: "我的_APP_KEY", appSecret: "我的_APP_SECRET")
+
         // 设置代理
         self.liqview.delegate = self 
-        
+
         // 实现商城
-        self.liqview.reloadShop(key: "我的_APP_KEY", secret: "我的_APP_SECRET", userId: "消费者_USER_ID")
-        
+        self.liqview.reloadShop
+
+        // OPTIONAL 可选: 
+        // 自动更新模版
+        liqManager.getUpdates()
+
+        // OPTIONAL 可选: 
+        // 载入商城离线信息, 从后台下载保存为 shop_data.json 后拉进项目即可
+        if let shopDataUrl = NSBundle.mainBundle.urlForResource("shop_data", withExtension: "json") {
+            liqManager.setShopData(shopDataURL: shopDataUrl)
+        }
     }
 }
 ````
 
 ## 插件 API
+
+#### LIQManager
+
+插件管理对象，负责管理应用 `APP_KEY`, `APP_SECRET` 等等，以及功能：
+    + 自动更新模版
+    + 载入离线商城信息
+    + 响应消费者登陆／退出
+
+- `defaultManager`
+    + 单列对象
+    + returns: `LIQManager`
+
+- 公开变值
+    + params
+    
+        param | class | notes
+        `appKey` | `String?` | 应用 APP_KEY, 从后台获取。只读变值.
+        `appSecret` | `String?` | 应用 APP_SECRET, 从后台获取。只读变值.
+        `appUserId` | `String?` | 消费者用户 id, 若 `nil` 的话会当做用户未登陆
+
+- `func setAppKey(appKey: String, appSecret: String)`
+    + 设置应用 APP_KEY, APP_SECRET
+    + params
+        
+        param | class | notes
+        `appKey` | `String?` | 应用 APP_KEY, 从后台获取。只读变值.
+        `appSecret` | `String?` | 应用 APP_SECRET, 从后台获取。只读变值.
+
+- `func setAppUserId(appUserId: String)`
+    + 设置消费者用户
+
+        param | class | notes
+        ------|-------|--------
+        `userId` | `String?` | 消费者用户 id, 若 `nil` 的话会当做用户未登陆
+
+- `func setShopData(shopDataURL: NSURL)`
+    + 设置商城首页信息，JSON 档案读取。 从后台下载。
+    + params; 
+
+        param | class | notes
+        ------|-------|-------
+        `shopDataURL` | `NSURL` | JSON 档案的 `NSURL` 路径
+
+- `func getUpdates()`
+    + 查询、下载、更新模版。会向服务器查看有没有新版本更新，若有的话会自行下载到项目沙盒，并且更新插件模版。
+
+#### LIQView
+
+插件显示器，用来显示商城及购物车
 
 - `func init(frame: CGRect)`
     + 初始化 `LIQWebview` 实例
@@ -53,52 +118,23 @@ class ShopViewController: UIViewController {
 
     + returns: 无
 
-- `func reloadShop(key: String, secret: String, userId: String?)`
+- `func reloadShop()`
     + 载入商城页面
-    + params
-        
-        param | class | notes
-        ------|-------|--------
-        `key` | `String` | 应用 APP_KEY, 从后台获取
-        `secret` | `String` | 应用 APP_SECRET, 从后台获取
-        `userId` | `String?` | 消费者用户 id, 若 `nil` 的话会当做用户未登陆
-
+    + params: 无
     + returns: 无
 
-- `func reloadCart(key: String, secret: String, userId: String?)`
+- `func reloadCart()`
     + 载入购物车页面
-    + params
-        
-        param | class | notes
-        ------|-------|--------
-        `key` | `String` | 应用 APP_KEY, 从后台获取
-        `secret` | `String` | 应用 APP_SECRET, 从后台获取
-        `userId` | `String?` | 消费者用户 id, 若 `nil` 的话会当做用户未登陆
-        
-    + returns: 无
+    + params: 无
+    + returns: 无        
 
-- `func reloadShopForUser(userId: String?)`
+- `func reloadShopUser()`
     + 刷新商城页面，用来更新消费者用户登陆状态
-    + params
-        
-        param | class | notes
-        ------|-------|-------
-        `userId` | `String?` | 消费者用户 id, 若 `nil` 的话会当做用户未登陆
-        
-    + returns: 无
-    
-- `func reloadCartForUser(userId: String?)`
-    + 刷新购物车页面，用来更新消费者用户登陆状态
-    + params
-        
-        param | class | notes
-        ------|--------|--------
-        `userId` | `String?` | 消费者用户 id, 若 `nil` 的话会当做用户未登陆
-        
+    + params: 无
     + returns: 无
 
 
-#### 代理方式
+#### LIQViewDelegate 代理方式
 
 所有插件事件通过 `LIQWebviewDelegate` 代理方式监听：
 
@@ -114,7 +150,7 @@ class ShopViewController: UIViewController {
         
         param | class | notes
         ------|-------|---------
-        `itemData` | `Dictionary<String, AnyObject>` | 产品信息 JSON, 请查看 [ItemData](json_objects.md)
+        `itemData` | `Dictionary<String, AnyObject>` | 产品信息 JSON, 请查看 `itemData`
 
 - `func webviewDidAddToCart(cartItemData: Dictionary<String, AnyObject>)`
     + 加入购物车事件, 若用户未登陆时可以在这个事件显示登陆／注册界面。也可以用来响应 UI 效果给用户, 列如: TabBar 购物车图标上添加 badge 显示有产品加入了购物车. 
@@ -122,7 +158,7 @@ class ShopViewController: UIViewController {
         
         param | class | notes
         ------|-------|---------
-        `cartItemData` | `Dictionary<String, AnyObject>` | 购物车列表项信息 JSON, 请查看 [CartItemData](json_objects.md)
+        `cartItemData` | `Dictionary<String, AnyObject>` | 购物车列表项信息 JSON, 请查看 `cartItemData`
 
 - `func webviewDidCheckout()`
     + 插件载入结算路由事件
@@ -133,6 +169,9 @@ class ShopViewController: UIViewController {
         
         param | class | notes
         ------|-------|---------
-        `orderData` | `Dictionary<String, AnyObject>` | 订单信息 JSON, 请查看 [OrderData](json_objects.md)
+        `orderData` | `Dictionary<String, AnyObject>` | 订单信息 JSON, 请查看 `orderData`
+
+
+
 
 

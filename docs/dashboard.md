@@ -5,7 +5,14 @@
 进入应用后台界面后，菜单选择 [基本信息] 可以看到商城基本信息. 
 请保密 `APP_KEY` 及 `APP_SECRET` ! 若需要重置的话，可以点击 [重置] 按钮
 
-![Screenshot](img/dashboard/reset_key_secret.png)
+![Screenshot](img/dashboard/shop_info.png)
+
+### 商城离线资源包
+
+进入应用后台界面后，菜单选择 [基本信息] 可以看到商城基本信息. 
+下面点击按钮 [下载商城资源] 保存为 `shop_data.json`. 这个文档包含商城首页的信息，若商城首页信息有改变可以再点击下载。
+
+下载后拉进 Xcode 项目，之后根据引入指示载入离线商城信息，加快用户看到商城信息的体验. 
 
 
 ### 产品管理
@@ -49,4 +56,8 @@
 
 ### 组合管理
 
+(COMING SOON)
+
 ### 海报管理
+
+(COMING SOON)
