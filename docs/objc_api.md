@@ -40,7 +40,8 @@
 
     // OPTIONAL 可选: 
     // 载入商城离线信息, 从后台下载保存为 shop_data.json 后拉进项目即可
-    NSURL* shopDataUrl = [[NSBundle mainBundle] pathForResource:@"shop_data" ofType: @"json"];
+    NSString* shopDataNSUrl = [[NSBundle mainBundle] pathForResource:@"shop_data" ofType: @"json"];
+    NSURL* shopDataUrl = [NSURL fileURLWithPath: shopDataNSUrl];
 
     if (shopDataUrl != nil) {
         [liqManager setShopData:shopDataUrl];
