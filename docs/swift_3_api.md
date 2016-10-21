@@ -20,21 +20,86 @@ class ShopViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // 针对 storyboard 7plus/6plus bug
+        self.webviewPlaceholder.frame = self.view.frame 
+
         // 添加到本view
         self.liqview = LIQView(frame: webviewPlaceholder.frame)
         self.view.addSubview(self.liqview)
 
+        // LionIQ 单列管理对象
+        let liqManager = LIQManager.defaultManager
+        liqManager.setAppKey(appKey: "我的_APP_KEY", appSecret: "我的_APP_SECRET")
+
         // 设置代理
         self.liqview.delegate = self 
-        
+
         // 实现商城
-        self.liqview.reloadShop(key: "我的_APP_KEY", secret: "我的_APP_SECRET", userId: "消费者_USER_ID")
-        
+        self.liqview.reloadShop
+
+        // OPTIONAL 可选: 
+        // 自动更新模版
+        liqManager.getUpdates()
+
+        // OPTIONAL 可选: 
+        // 载入商城离线信息, 从后台下载保存为 shop_data.json 后拉进项目即可
+        if let shopDataUrl = Bundle.main.url(forResource: "shop_data", withExtension: "json") {
+            liqManager.setShopData(shopDataURL: shopDataUrl)
+        }
     }
 }
 ````
 
 ## 插件 API
+
+#### LIQManager
+
+插件管理对象，负责管理应用 `APP_KEY`, `APP_SECRET` 等等，以及功能：
+    + 自动更新模版
+    + 载入离线商城信息
+    + 响应消费者登陆／退出
+
+- `defaultManager`
+    + 单列对象
+    + returns: `LIQManager`
+
+- 公开变值
+    + params
+    
+        param | class | notes
+        `appKey` | `String?` | 应用 APP_KEY, 从后台获取。只读变值.
+        `appSecret` | `String?` | 应用 APP_SECRET, 从后台获取。只读变值.
+        `appUserId` | `String?` | 消费者用户 id, 若 `nil` 的话会当做用户未登陆
+
+- `func setAppKey(appKey: String, appSecret: String)`
+    + 设置应用 APP_KEY, APP_SECRET
+    + params
+        
+        param | class | notes
+        `appKey` | `String?` | 应用 APP_KEY, 从后台获取。只读变值.
+        `appSecret` | `String?` | 应用 APP_SECRET, 从后台获取。只读变值.
+
+- `func setAppUserId(appUserId: String)`
+    + 设置消费者用户
+
+        param | class | notes
+        ------|-------|--------
+        `userId` | `String?` | 消费者用户 id, 若 `nil` 的话会当做用户未登陆
+
+- `func setShopData(shopDataURL: URL)`
+    + 设置商城首页信息，JSON 档案读取。 从后台下载。
+    + params; 
+
+        param | class | notes
+        ------|-------|-------
+        `shopDataURL` | `URL` | JSON 档案的 `URL` 路径
+
+- `func getUpdates()`
+    + 查询、下载、更新模版。会向服务器查看有没有新版本更新，若有的话会自行下载到项目沙盒，并且更新插件模版。
+
+#### LIQView
+
+插件显示器，用来显示商城及购物车
 
 - `func init(frame: CGRect)`
     + 初始化 `LIQWebview` 实例
@@ -46,52 +111,23 @@ class ShopViewController: UIViewController {
 
     + returns: 无
 
-- `func reloadShop(_ key: String, secret: String, userId: String?)`
+- `func reloadShop()`
     + 载入商城页面
-    + params
-        
-        param | class | notes
-        ------|-------|--------
-        `key` | `String` | 应用 APP_KEY, 从后台获取
-        `secret` | `String` | 应用 APP_SECRET, 从后台获取
-        `userId` | `String?` | 消费者用户 id, 若 `nil` 的话会当做用户未登陆
-
+    + params: 无
     + returns: 无
 
-- `func reloadCart(_ key: String, secret: String, userId: String?)`
+- `func reloadCart()`
     + 载入购物车页面
-    + params
-        
-        param | class | notes
-        ------|-------|--------
-        `key` | `String` | 应用 APP_KEY, 从后台获取
-        `secret` | `String` | 应用 APP_SECRET, 从后台获取
-        `userId` | `String?` | 消费者用户 id, 若 `nil` 的话会当做用户未登陆
-        
-    + returns: 无
+    + params: 无
+    + returns: 无        
 
-- `func reloadShopForUser(_ userId: String?)`
+- `func reloadShopUser()`
     + 刷新商城页面，用来更新消费者用户登陆状态
-    + params
-        
-        param | class | notes
-        ------|-------|-------
-        `userId` | `String?` | 消费者用户 id, 若 `nil` 的话会当做用户未登陆
-        
-    + returns: 无
-    
-- `func reloadCartForUser(_ userId: String?)`
-    + 刷新购物车页面，用来更新消费者用户登陆状态
-    + params
-        
-        param | class | notes
-        ------|--------|--------
-        `userId` | `String?` | 消费者用户 id, 若 `nil` 的话会当做用户未登陆
-        
+    + params: 无
     + returns: 无
 
 
-#### 代理方式
+#### LIQViewDelegate 代理方式
 
 所有插件事件通过 `LIQWebviewDelegate` 代理方式监听：
 
