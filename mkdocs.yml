@@ -8,5 +8,6 @@ pages:
 - JSON 对象: json_objects.md
 - 接入支付: payment.md
 - 储存订单信息: order_data_json.md
+- SDK Debug Log: debug_log.md
 - 后台管理: dashboard.md
 theme: readthedocs
