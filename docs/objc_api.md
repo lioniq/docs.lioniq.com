@@ -9,7 +9,7 @@
 ````
 #import "ShopViewController.h"
 
-@interface ShopViewController ()
+@interface ShopViewController () <LIQViewDelegate>
 
 @end
 
@@ -56,7 +56,7 @@
 ````
 #import "CartViewController.h"
 
-@interface CartViewController ()
+@interface CartViewController () <LIQViewDelegate>
 
 @end
 
@@ -85,9 +85,10 @@
     // LionIQ 单列管理对象
     LIQManager* lm = [LIQManager defaultManager];
 
-    // 用户登陆后通知SDK
-    // 直接获取你APP的用户ID即可
-    [lm setAppUserIdWithAppUserId: "USER_ID"];
+    // 让用户登录CheckForLogin 保存用户 userId 再调用 refreshShopUser 方式
+    [lm setAppUserIdWithAppUserId: "THIS_USER_ID"];
+
+    // 更新购物车用户
     [self.liqview refreshShopUser];
 }
 @end
@@ -98,7 +99,7 @@
 ````
 #import "SearchViewController.h"
 
-@interface SearchViewController ()
+@interface SearchViewController () <LIQViewDelegate>
 
 @end
 
@@ -120,6 +121,13 @@
     // 实现搜索
     [self.liqview reloadSearch];
 }
+
+// 代理方式: 由于`SearchViewController`不是最底下的`viewController`点击`SearchViewController`搜索的cancelButton 执行 `webviewDidAddToCart` 代理方式 pop 掉当前的`SearchViewController`,回到`shopViewController`
+
+- (void)webviewSearchDidCancel {
+    [self.navigationController popViewControllerAnimated:true];
+}
+
 @end
 ````
 

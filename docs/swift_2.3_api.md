@@ -96,10 +96,10 @@ class CartViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
          
-        // 用户登陆后通知SDK
-        // 直接获取你APP的用户ID即可
+        // 让用户登录CheckForLogin 保存用户 userId 再调用 refreshShopUser 方式
         liqManager.setAppUserId(appUserId: "USER_ID")
         lioniqView.refreshShopUser()
+
     }
 }
 ````
@@ -133,6 +133,14 @@ class SearchViewController : UIViewController {
 
         // 实现搜索
         self.liqView.reloadSearch()
+    }
+}
+
+// 代理方式: 由于`SearchViewController`不是最底下的`viewController`点击`SearchViewController`搜索的cancelButton 执行 `webviewDidAddToCart` 代理方式 pop 掉当前的`SearchViewController`,回到`shopViewController`
+extension SearchViewController: LIQViewDelegate {
+    func webviewDidCancel() {
+
+        self.navigationController?.popViewControllerAnimated(true)
     }
 }
 ````
