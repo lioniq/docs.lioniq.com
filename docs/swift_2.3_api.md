@@ -12,6 +12,7 @@ Swift 2.3 兼容版本需要从 `swift2.3` 分支下载插件包.
 在 `ViewController` 中引入插件生成 `LIQWebview` 的实例就可以引入商城、及购物车界面。
 (使用前请到官网后台申请生成 `APP` 的 `APP_KEY` 和 `APP_SECRET` 帐号权限)
 
+#### 创建商城
 ````
 import UIKit
 import Lioniq
@@ -57,6 +58,93 @@ class ShopViewController: UIViewController {
     }
 }
 ````
+
+
+#### 创建购物车
+````
+import UIKit
+import Lioniq
+
+class CartViewController: UIViewController {
+
+    // Storyboard 添加一个普通 View 作为占位 (目前无法直接 Storyboard 使用)
+    @IBOutlet weak var webviewPlaceholder: UIView!
+
+    // 插件 webview 
+    var liqView: LIQView!
+
+    // LionIQ 单列管理对象
+    let liqManager = LIQManager.defaultManager
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // 针对 storyboard 7plus/6plus bug
+        webviewPlaceholder.frame = self.view.frame
+        self.liqView = LIQView(frame: webviewPlaceholder.frame)
+
+        // 添加到本view
+        self.view.addSubview(self.liqView) 
+
+        // 设置代理
+        self.liqView.delegate = self
+
+        // 加载购物车
+        self.liqView.reloadCart()
+    }
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+         
+        // 让用户登录CheckForLogin 保存用户 userId 再调用 refreshShopUser 方式
+        liqManager.setAppUserId(appUserId: "USER_ID")
+        lioniqView.refreshShopUser()
+
+    }
+}
+````
+
+
+#### 创建搜索
+````
+import UIKit
+import Lioniq
+
+class SearchViewController : UIViewController {
+    
+    // Storyboard 添加一个普通 View 作为占位 (目前无法直接 Storyboard 使用)
+    @IBOutlet weak var webviewPlaceholder: UIView!
+
+    // 插件 webview 
+    var liqView: LIQView!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // 针对 storyboard 7plus/6plus bug
+        webviewPlaceholder.frame = self.view.frame
+        self.liqView = LIQView(frame: webviewPlaceholder.frame)
+
+        // 添加到本view
+        self.view.addSubview(self.liqView)
+
+        // 设置代理
+        self.liqView.delegate = self
+
+        // 实现搜索
+        self.liqView.reloadSearch()
+    }
+}
+
+// 代理方式: 由于`SearchViewController`不是最底下的`viewController`点击`SearchViewController`搜索的cancelButton 执行 `webviewDidAddToCart` 代理方式 pop 掉当前的`SearchViewController`,回到`shopViewController`
+extension SearchViewController: LIQViewDelegate {
+    func webviewDidCancel() {
+
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+}
+````
+
 
 ## 插件 API
 

@@ -5,10 +5,11 @@
 在 `ViewController` 中引入插件生成 `LIQWebview` 的实例就可以引入商城、及购物车界面。
 (使用前请到官网后台申请生成 `APP` 的 `APP_KEY` 和 `APP_SECRET` 帐号权限)
 
+###创建商城
 ````
 #import "ShopViewController.h"
 
-@interface ShopViewController ()
+@interface ShopViewController () <LIQViewDelegate>
 
 @end
 
@@ -50,6 +51,86 @@
 
 @end
 ````
+
+###创建购物车
+````
+#import "CartViewController.h"
+
+@interface CartViewController () <LIQViewDelegate>
+
+@end
+
+@implementation CartViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    // 针对 storyboard 7plus/6plus bug
+    self.webviewPlaceholder.frame = self.view.frame;
+
+    // 添加到本view
+    self.liqview = [[LIQView alloc] initWithFrame:[self webviewPlaceholder].frame];
+    [self.view addSubview: self.liqview];
+
+    // 设置代理
+    self.liqview.delegate = self;
+
+    // 加载购物车
+    [self.liqview reloadCart];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+    // LionIQ 单列管理对象
+    LIQManager* lm = [LIQManager defaultManager];
+
+    // 让用户登录CheckForLogin 保存用户 userId 再调用 refreshShopUser 方式
+    [lm setAppUserIdWithAppUserId: "THIS_USER_ID"];
+
+    // 更新购物车用户
+    [self.liqview refreshShopUser];
+}
+@end
+
+````
+
+####创建搜索
+````
+#import "SearchViewController.h"
+
+@interface SearchViewController () <LIQViewDelegate>
+
+@end
+
+@implementation SearchViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    // 针对 storyboard 7plus/6plus bug
+    self.webviewPlaceholder.frame = self.view.frame;
+
+    // 添加到本view
+    self.liqview = [[LIQView alloc] initWithFrame:[self webviewPlaceholder].frame];
+    [self.view addSubview: self.liqview];
+
+    // 设置代理
+    self.liqview.delegate = self;
+
+    // 实现搜索
+    [self.liqview reloadSearch];
+}
+
+// 代理方式: 由于`SearchViewController`不是最底下的`viewController`点击`SearchViewController`搜索的cancelButton 执行 `webviewDidAddToCart` 代理方式 pop 掉当前的`SearchViewController`,回到`shopViewController`
+
+- (void)webviewSearchDidCancel {
+    [self.navigationController popViewControllerAnimated:true];
+}
+
+@end
+````
+
 
 ## 插件 API
 
