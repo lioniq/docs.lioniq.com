@@ -5,7 +5,8 @@
 在 `ViewController` 中引入插件生成 `LIQWebview` 的实例就可以引入商城、及购物车界面。
 (使用前请到官网后台申请生成 `APP` 的 `APP_KEY` 和 `APP_SECRET` 帐号权限)
 
-###创建商城
+### 商城集成
+
 ````
 #import "ShopViewController.h"
 
@@ -52,7 +53,10 @@
 @end
 ````
 
-###创建购物车
+### 购物车集成 CartViewController
+
+购物车一样使用 `LIQView` 就可以实现，使用 `reloadCart()` 即可。LionIQ 不需要另外登陆也不需要迁移你的用户信息，所有购物车只需要用户ID，用 `LIQManager` 的 `setAppUserId` 方式。
+
 ````
 #import "CartViewController.h"
 
@@ -95,7 +99,9 @@
 
 ````
 
-####创建搜索
+### 搜索集成 SearchViewController
+商城搜索组件，可以查看项目 Demo 项目在商城页面的搜索框绑定点击事件过度到搜索页面。点击 Cancel 按钮后可以通过代理方式 pop 回到商城。
+
 ````
 #import "SearchViewController.h"
 
@@ -198,12 +204,16 @@
     + params: 无
     + returns: 无
 
-
 - `- (void)reloadCart`
     + 载入购物车页面
     + params: 无        
     + returns: 无
 
+- `- (void)reloadSearch`
+    + 载入商城搜索页面
+    + params: 无        
+    + returns: 无
+    
 - `- (void)reloadShopUser`
     + 刷新商城页面，用来更新消费者用户登陆状态
     + params: 无        
@@ -246,4 +256,6 @@
         ------|-------|---------
         `orderData` | `NSDictionary<NSString *,id>` | 订单信息 JSON, 请查看 [OrderData](json_objects.md)
 
+- `- (void)webviewDidCancel`
+    + 点击取消按钮事件，只用在`Search`组件
 
