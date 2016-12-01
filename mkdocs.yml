@@ -1,10 +1,12 @@
 site_name: LionIQ 文档
 pages: 
 - 首页: index.md
-- 安装: install.md
+- IOS安装: install.md
+- Android 安装: android_install.md
 - Swift3: swift_3_api.md
 - Swift2.3: swift_2.3_api.md
 - Obj-C: objc_api.md
+- Android: android.md
 - JSON 对象: json_objects.md
 - 接入支付: payment.md
 - 储存订单信息: order_data_json.md

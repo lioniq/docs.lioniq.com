@@ -2,7 +2,7 @@
 
 ## 项目引入
 
-在 `ViewController` 中引入插件生成 `LIQWebview` 的实例就可以引入商城、及购物车界面。
+在 `ViewController` 中引入插件生成 `LIQView` 的实例就可以引入商城、及购物车界面。
 (使用前请到官网后台申请生成 `APP` 的 `APP_KEY` 和 `APP_SECRET` 帐号权限)
 
 ### 商城集成
