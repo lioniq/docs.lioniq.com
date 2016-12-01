@@ -4,7 +4,7 @@
 在`Activity`中引入插件生成`LIQView`的实例就可以引入商城、及购物车界面。
 (使用前请到官网后台申请生成 `APP` 的 `APP_KEY` 和 `APP_SECRET` 帐号权限)
 
-### 商城集成
+### 商城集成 ShopActivity
 
 ````
 import com.lioniq.LIQJavascriptInterface;
@@ -33,28 +33,25 @@ public class ShopActivity extends AppCompatActivity {
         // 初始化 LIQView, 协议方式 接口实现
         liqView = new LIQView(this, new LIQJavascriptInterface() {
 
+        	// 加入购物车 json to string
             @JavascriptInterface
             @Override
-            public void didAddToCart(String itemData) {
-                
-            }
+            public void didAddToCart(String itemData) {}
 
+            // 进入详情  由shop主页进入到详情
             @JavascriptInterface
             @Override
-            public void didItemDetail(String item) {
+            public void didItemDetail(String item) {}
 
-            }
-
+            // 载入了商品详情内容  json to string
             @JavascriptInterface
             @Override
-            public void didLoadItemDetail(String itemData) {
+            public void didLoadItemDetail(String itemData) {}
 
-            }
-
+            // 路由事件  由详情返回到shop主页
             @JavascriptInterface
             @Override
-            public void didMain(String didmain) {
-            }
+            public void didMain(String didmain) {}
         });
 
         // 添加到本view
@@ -67,27 +64,13 @@ public class ShopActivity extends AppCompatActivity {
         // OPTIONAL 可选: 
     	// 载入商城离线信息, 从后台下载保存为 shop_data.json 后拉进项目放在资源文件夹assets即可
     	// this 为当前上下文 Context
-        liqManager.setShopData(this, getShopDataStr());
+        liqManager.setShopData(this, "shop_data.json");
 
        
         // 更新 userId
         liqManager.set_appUserId("我的_USER_ID");
         liqView.refreshShopUser();
     }
-
-    // shop_data.json to string 
-    private String getShopDataStr() {
-        try {
-            InputStream shopData = this.getAssets().open("shop_data.json");
-            String shopDataStr = liqManager.convertStreamToString(shopData);
-            return shopDataStr;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
-
 
     // 点击系统Back键的处理 浏览的网页回退而不是退出浏览器 webview can go back
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -100,9 +83,11 @@ public class ShopActivity extends AppCompatActivity {
 }
 ````
 
-````
 ### 购物车集成 CartActivity
 
+购物车一样使用 `LIQView` 就可以实现，使用 `reloadCart()` 即可。LionIQ 不需要另外登陆也不需要迁移你的用户信息，所有购物车只需要用户ID，用 `LIQManager` 的 `setAppUserId` 方式。
+
+````
 import com.lioniq.LIQJavascriptInterface;
 import com.lioniq.LIQManager;
 import com.lioniq.LIQView;
@@ -130,41 +115,35 @@ public class CartActivity extends AppCompatActivity {
         // 初始化 LIQView, 协议方式 接口实现
         liqView = new LIQView(this, new LIQJavascriptInterface() {
 
+        	// 加入购物车 json to string
             @JavascriptInterface
             @Override
-            public void didAddToCart(String itemData) {
-                
-            }
+            public void didAddToCart(String itemData) {}
 
+            // 进入详情  由cart进入到详情
             @JavascriptInterface
             @Override
-            public void didItemDetail(String item) {
+            public void didItemDetail(String item) {}
 
-            }
-
+            // 载入了商品详情内容  json to string
             @JavascriptInterface
             @Override
-            public void didLoadItemDetail(String itemData) {
+            public void didLoadItemDetail(String itemData) {}
 
-            }
-
+            // 回到购物车主页
             @JavascriptInterface
             @Override
-            public void didMain(String didmain) {
-                
-            }
+            public void didMain(String didmain) {}
 
+            // 由购物车进入到结算view
             @JavascriptInterface
             @Override
-            public void webviewDidCheckout() {
+            public void webviewDidCheckout() {}
 
-            }
-
+            // 点击了结算view上的去结算按钮 json to string
             @JavascriptInterface
             @Override
-            public void webviewDidOrder(String orderData) {
-
-            }
+            public void webviewDidOrder(String orderData) {}
 
         });
 
@@ -196,10 +175,10 @@ public class CartActivity extends AppCompatActivity {
 }
 ````
 
-````
 ### 搜索集成 SearchActivity
 商城搜索组件，可以查看项目 Demo 项目在商城页面的搜索框绑定点击事件过度到搜索页面。点击 Cancel 按钮后可以通过代理方式 pop 回到商城。
 
+````
 import com.lioniq.LIQJavascriptInterface;
 import com.lioniq.LIQManager;
 import com.lioniq.LIQView;
@@ -222,12 +201,12 @@ public class SearchActivity extends AppCompatActivity {
 
         // 初始化 LIQView, 协议方式 接口实现
         liqView = new LIQView(this, new LIQJavascriptInterface() {
+        	// 由搜索view返回到shop主页
             @JavascriptInterface
             @Override
             public void webviewSearchDidCancel() {
             	// TODO: 返回首页 ShopActivity
             }
-
 
         });
 
@@ -322,7 +301,7 @@ public class SearchActivity extends AppCompatActivity {
     + returns: 无
 
 
-#### LIQViewDelegate 协议方式 接口
+#### LiqJavascriptInterface 协议方式 接口
 
 所有插件事件通过 `LiqJavascriptInterface` 协议方式 监听JS：
 
