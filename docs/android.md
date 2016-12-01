@@ -250,7 +250,7 @@ public class SearchActivity extends AppCompatActivity {
         `appSecret` | `String?` | 应用 APP_SECRET, 从后台获取。只读变值.
         `appUserId` | `String?` | 消费者用户 id, 若 `nil` 的话会当做用户未登陆
 
-- `public void setAppKey(String appKey, String appSecret)`
+- `public void setAppKey(Context c, String appKey, String appSecret)`
     + 设置应用 APP_KEY, APP_SECRET
     + params
         
@@ -265,7 +265,7 @@ public class SearchActivity extends AppCompatActivity {
         ------|-------|--------
         `userId` | `String?` | 消费者用户 id, 若 `nil` 的话会当做用户未登陆
 
-- `public void setShopData(String shopDataURL)`
+- `public void setShopData(Context c, String shopDataURL)`
     + 设置商城首页信息，JSON 档案读取。 从后台下载。
     + params; 
 
